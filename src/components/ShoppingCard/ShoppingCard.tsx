@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './ShoppingCard.css'
 import {AiFillDelete,AiOutlineHeart,AiFillCloseCircle} from 'react-icons/ai'
 import {FcPlus} from 'react-icons/fc'
@@ -35,13 +35,26 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
     const [show, setShow] = useState(false);
     const [wish,setWishList] = useState<MyType[]>([]);
     const [check,setCheck] = useState<boolean>(false);
-    const [cartItems,setCartItems]=useState<number>(lists.length)
+    const [cartItems,setCartItems]=useState<number>(lists.length);
+
+
+    useEffect(()=>{
+
+        setCartItems(lists.length)
+
+    },[lists])
+
+    const handleClick = () => 
+    {
+        setShow(!show)
+    }
 
     
     const saveDataHandler = (enteredData:MyType) =>
     {
         const data = {
             ...enteredData,
+            id:lists.length
 
             
             
@@ -62,7 +75,7 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
             list.id!==id
 
         ))
-        setCartItems(lists.length)
+        
 
     }
 
@@ -113,9 +126,14 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
         {
             
             lists.map((item,idx)=>{
-                return <div className="SingleCard" key = {item.id} onClick={()=>{setShow(!show)}}>
+
+            
+                return <div className="SingleCard" key = {item.id} onClick={handleClick}>
                     {
-                        show && (<><div className="Card__Modal">{details}
+                        
+                        show && (<>
+                       
+                        <div className="Card__Modal">{details}
                         
                         </div><span className="modal__close"><AiFillCloseCircle/></span></>) 
                     }
