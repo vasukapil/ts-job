@@ -32,8 +32,8 @@ type MyType = {
 const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
 
     const [lists,setLists] = useState(arr);
-    const [show, setShow] = useState(false);
-    const [wish,setWishList] = useState<MyType[]>([]);
+    const [show, setShow] = useState<number>();
+    const [wish,setWishList] = useState<number>();
     const [check,setCheck] = useState<boolean>(false);
     const [cartItems,setCartItems]=useState<number>(lists.length);
 
@@ -44,9 +44,9 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
 
     },[lists])
 
-    const handleClick = () => 
+    const handleClick = (idx:number) => 
     {
-        setShow(!show)
+        setShow(idx)
     }
 
     
@@ -90,14 +90,11 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
 
     const handleWish = (id:number) =>{
 
-        const val = arr.filter((item)=>
+     setWishList(id)
+
+    setCheck(!check);
+
         
-
-        item.id === id 
-
-    )
-
-        setCheck(!check);
 
      
 
@@ -128,14 +125,14 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
             lists.map((item,idx)=>{
 
             
-                return <div className="SingleCard" key = {item.id} onClick={handleClick}>
+                return <div className="SingleCard" key = {item.id} onClick={()=>handleClick(idx)}>
                     {
                         
-                        show && (<>
+                        show==idx && (<>
                        
                         <div className="Card__Modal">{details}
                         
-                        </div><span className="modal__close"><AiFillCloseCircle/></span></>) 
+                        </div><span className="modal__close" onClick={()=>setShow}><AiFillCloseCircle/></span></>) 
                     }
                     <div className="list__icons">
                         {
@@ -149,11 +146,11 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
                               <span>
                               < FcPlus />
                            </span>
-                           <span onClick={()=>{handleWish(item.id)}}>
+                           <span onClick={()=>handleWish(idx)}>
                                     {
-                                        check ?
+                                        show==idx ?
                                          <>
-                                        <p className="wishlist__text">Added to WishList</p> 
+                                        <p className="wishlist__text">Added to Wishlist</p> 
                                         
                                         </>
                                         : (
