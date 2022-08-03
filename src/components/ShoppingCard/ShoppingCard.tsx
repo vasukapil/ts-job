@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './ShoppingCard.css'
 import {AiFillDelete,AiOutlineHeart,AiFillCloseCircle} from 'react-icons/ai'
 import {FcPlus} from 'react-icons/fc'
+import ShoppingForm from '../Form/ShoppingForm'
 
 
 type MyType = {
@@ -9,32 +10,50 @@ type MyType = {
     image:string;
     title:string;
     desc:string;
+    price?:number;
   }
+
 
   type Props = {
       del : boolean;
       setDelete : React.Dispatch<React.SetStateAction<boolean>>;
       details : string
+      onCartNumber:(num: number) => void
   }
   
   let arr: MyType[] = [
-    { id: 0, image: "./Images/shoe.jpg",title:"shoes",desc :"Air Jordan" },
-    { id: 1, image: "./Images/shirt.jpg",title:"shoes",desc :"Air Jordan" },
-    { id: 2,  image: "./Images/mobile.jpg",title:"shoes",desc :"Air Jordan"  },
-    { id: 3,  image: "./Images/laptop.jpg",title:"shoes",desc :"Air Jordan"  }
+    { id: 0, image: "./Images/shoe.jpg",title:"shoes",desc :"20$" },
+    { id: 1, image: "./Images/shirt.jpg",title:"shirt",desc :"25$" },
+    { id: 2,  image: "./Images/mobile.jpg",title:"mobile",desc :"60$"  },
+    { id: 3,  image: "./Images/laptop.jpg",title:"Laptop",desc :"100$"  }
   ];
   
 
-const ShoppingCard = ({del,setDelete,details}:Props) => {
+const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
 
     const [lists,setLists] = useState(arr);
     const [show, setShow] = useState(false);
+    const [wish,setWishList] = useState<MyType[]>([]);
+    const [check,setCheck] = useState<boolean>(false);
+    const [cartItems,setCartItems]=useState<number>(lists.length)
 
-    const [pic,setPic] = useState<string>("");
-    const [title,setTitle] = useState<string>("");
-    const [desc,setDesc] = useState<string>("");
-    const [price,setPrice] = useState<number|string>();
     
+    const saveDataHandler = (enteredData:MyType) =>
+    {
+        const data = {
+            ...enteredData,
+
+            
+            
+            
+        };
+
+        setLists([data,...lists])
+
+       
+        
+       
+    }
 
     function handleDelete(id:number){
 
@@ -43,48 +62,57 @@ const ShoppingCard = ({del,setDelete,details}:Props) => {
             list.id!==id
 
         ))
+        setCartItems(lists.length)
 
     }
 
-    function handleSubmit(e:React.FormEvent)
-    {
-       setLists([ ...lists,
-        {
-        id:lists.length,    
-        image:pic,
-        title,
-        desc
-        }
+    // const DataHandler = (enteredData) => {
+
+    //     const data = {
+    //         ...enteredData,
+
+    //     }
+
+    // }
+
+    const handleWish = (id:number) =>{
+
+        const val = arr.filter((item)=>
         
 
+        item.id === id 
 
-    ])
-    console.log(pic,title,desc)
-  
+    )
+
+        setCheck(!check);
+
+     
+
+       
     
 
-    }
+       
 
+        
+
+       
+    }
+        
+    onCartNumber(cartItems);
+    
+
+
+    
  
   
   return (
     <div className="Card__Container">
 
-        <div className="Form">
-
-            <form onSubmit={(e)=>handleSubmit}>
-                <input placeholder="imageLink" className="form__img" value={pic} onChange = {(e)=>{setPic(e.target.value)}}></input>
-                <input placeholder="title" className="form__title"value={title} onChange = {(e)=>{setTitle(e.target.value)}}></input>
-                <input placeholder="description" className="form__desc"value={desc} onChange = {(e)=>{setDesc(e.target.value)}}></input>
-                {/* <input placeholder="price" className="form__price"value={price} onChange = {(e)=>{setPrice(e.target.value)}}></input> */}
-                <button type="submit">Submit to HomePage</button>
-
-            </form>
-           
-        </div>
+       <ShoppingForm onSaveData={saveDataHandler} />
 
         {
-            lists.map((item)=>{
+            
+            lists.map((item,idx)=>{
                 return <div className="SingleCard" key = {item.id} onClick={()=>{setShow(!show)}}>
                     {
                         show && (<><div className="Card__Modal">{details}
@@ -95,18 +123,36 @@ const ShoppingCard = ({del,setDelete,details}:Props) => {
                         {
                           del ? (
                               <>
+                              
                                 <span onClick={()=>handleDelete(item.id)} > 
                                 <AiFillDelete/>
+                                
                              </span>
                               <span>
                               < FcPlus />
                            </span>
-                           <span>
-                              < AiOutlineHeart />
-                           </span>
+                           <span onClick={()=>{handleWish(item.id)}}>
+                                    {
+                                        check ?
+                                         <>
+                                        <p className="wishlist__text">Added to WishList</p> 
+                                        
+                                        </>
+                                        : (
+
+                                           
+                                             < AiOutlineHeart /> )
+                                        
+                                    }
+                                
+                             </span>
                            </>
 
-                            ) :(
+                            ) :
+                            
+                            (
+
+        
 
                                 <span>
                                 < FcPlus />
@@ -121,6 +167,7 @@ const ShoppingCard = ({del,setDelete,details}:Props) => {
                     
                     <h2 className="card__title">{item.title}</h2>
                     <p className="card__desc">{item.desc}</p>
+                    
                 </div>
 
             })

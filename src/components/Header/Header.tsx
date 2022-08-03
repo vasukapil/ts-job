@@ -1,7 +1,11 @@
 import React from 'react'
 import './Header.css'
 
-const Header = () => {
+
+type props = {
+    num : number|undefined;
+}
+const Header = ({num}:props) => {
   return (
     <div className="Header__navbar">
 
@@ -13,7 +17,7 @@ const Header = () => {
             <li>Home</li>
             <li>About</li>
             <li>Products</li>
-            <li>Cart</li>
+            <li>Cart {num}</li>
         </ul>
         </div>
 
