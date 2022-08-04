@@ -37,6 +37,7 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
     const [check,setCheck] = useState<boolean>(false);
     const [cartItems,setCartItems]=useState<number>(lists.length);
 
+    
 
     useEffect(()=>{
 
@@ -47,6 +48,13 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
     const handleClick = (idx:number) => 
     {
         setShow(idx)
+    }
+
+    const handleAddItem = (name:string) => {
+        localStorage.setItem("key",name);
+        console.log(name)
+        
+   
     }
 
     
@@ -93,6 +101,7 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
      setWishList(id)
 
     setCheck(!check);
+  
 
         
 
@@ -132,7 +141,7 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
                        
                         <div className="Card__Modal">{details}
                         
-                        </div><span className="modal__close" onClick={()=>setShow}><AiFillCloseCircle/></span></>) 
+                        </div><span className="modal__close"><AiFillCloseCircle/></span></>) 
                     }
                     <div className="list__icons">
                         {
@@ -169,7 +178,7 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
 
         
 
-                                <span>
+                                <span onClick={()=>handleAddItem(item.title)}>
                                 < FcPlus />
                              </span>
 
@@ -182,6 +191,7 @@ const ShoppingCard = ({del,setDelete,details,onCartNumber}:Props) => {
                     
                     <h2 className="card__title">{item.title}</h2>
                     <p className="card__desc">{item.desc}</p>
+                    <button onClick={()=>handleAddItem(item.title)}>ADD TO CART</button>
                     
                 </div>
 
