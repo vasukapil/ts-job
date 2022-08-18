@@ -15,8 +15,8 @@ const Header = ({num}:props) => {
         <div className="Header__items">
         <ul className="nav__items">
             <li>Home</li>
-            <li>About</li>
             <li>Products</li>
+            <li>Admin</li>
             <li>Cart {num}</li>
         </ul>
         </div>
